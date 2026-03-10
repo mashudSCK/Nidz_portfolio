@@ -3,14 +3,6 @@
    Custom styles that complement TailwindCSS utilities
    ============================================================ */
 
-/* ── AOS safety net ──────────────────────────────────────── */
-/* If AOS fails to initialise, force all animated elements visible
-   after 2 s using a CSS animation delay fallback               */
-@keyframes aos-fallback { to { opacity: 1; transform: none; } }
-[data-aos] {
-  animation: aos-fallback 0s 2s forwards;
-}
-
 /* ── Base & smooth scrolling ─────────────────────────────── */
 html {
   scroll-behavior: smooth;
