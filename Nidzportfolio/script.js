@@ -25,15 +25,18 @@ const EMAILJS_TEMPLATE_ID = "template_ong3cbz";  // Email Templates
 
 /* ── 1. AOS initialisation + EmailJS init ───────────────── */
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialise EmailJS with your public key
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-
+  // AOS must init first — independent of EmailJS
   AOS.init({
     duration: 700,
     once: true,          // animate only the first time
     offset: 80,          // trigger 80px before element enters viewport
     easing: "ease-out-cubic",
   });
+
+  // Initialise EmailJS only if the SDK loaded successfully
+  if (typeof emailjs !== "undefined") {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
 });
 
 /* ── Wait for full DOM ───────────────────────────────────── */
@@ -263,6 +266,13 @@ document.addEventListener("DOMContentLoaded", () => {
       from_email: emailInput.value.trim(),
       message:    msgInput.value.trim(),
     };
+
+    if (typeof emailjs === "undefined") {
+      alert("Sorry, the email service failed to load. Please email nidzareem@gmail.com directly.");
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="ri-send-plane-fill" aria-hidden="true"></i> Send Message`;
+      return;
+    }
 
     emailjs
       .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
