@@ -25,13 +25,20 @@ const EMAILJS_TEMPLATE_ID = "template_ong3cbz";  // Email Templates
 
 /* ── 1. AOS initialisation + EmailJS init ───────────────── */
 document.addEventListener("DOMContentLoaded", () => {
-  // AOS must init first — independent of EmailJS
-  AOS.init({
-    duration: 700,
-    once: true,          // animate only the first time
-    offset: 80,          // trigger 80px before element enters viewport
-    easing: "ease-out-cubic",
-  });
+  // If AOS CDN loaded successfully, initialise it
+  if (typeof AOS !== "undefined") {
+    AOS.init({
+      duration: 700,
+      once: true,
+      offset: 80,
+      easing: "ease-out-cubic",
+    });
+  } else {
+    // Fallback: AOS CDN failed – remove data-aos so elements are visible
+    document.querySelectorAll("[data-aos]").forEach((el) => {
+      el.removeAttribute("data-aos");
+    });
+  }
 
   // Initialise EmailJS only if the SDK loaded successfully
   if (typeof emailjs !== "undefined") {
